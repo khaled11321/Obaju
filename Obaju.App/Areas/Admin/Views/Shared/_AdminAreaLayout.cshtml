@@ -1,41 +1,30 @@
-﻿@{
+@{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <div class="col-md-12">
-        <ul class="breadcrumb">
-            <li><a href="#">Home</a></li>
-            <li>@ViewData["Title"]</li>
-        </ul>
-    </div>
+<div class="container admin-shell">
+    <aside class="admin-sidebar">
+        <h3 style="margin-top:0;">Admin Dashboard</h3>
+        <a asp-area="Admin" asp-controller="Manage" asp-action="CreateCategory">إدارة الفئات</a>
+        <a asp-area="Admin" asp-controller="Manage" asp-action="CreateBrand">إدارة العلامات التجارية</a>
+        <a asp-area="Admin" asp-controller="Manage" asp-action="CreateProduct">إدارة المنتجات</a>
+        <a asp-area="Admin" asp-controller="Manage" asp-action="Issues">إدارة الطلبات والمشاكل</a>
+        <a asp-area="Admin" asp-controller="Manage" asp-action="SendNewspaper">العروض والكوبونات</a>
+    </aside>
 
-    <div class="col-md-3">
-        <div class="panel panel-default sidebar-menu">
-            <div class="panel-heading">
-                <h3 class="panel-title">Admin panel</h3>
-            </div>
-
-            <div class="panel-body">
-                <ul class="nav nav-pills nav-stacked">
-                    <li @if ((string)ViewData["Title"] == "Create category") { @: class="active"
-                        } ><a asp-area="Admin" asp-controller="Manage" asp-action="CreateCategory"><i class="fa fa-plus-square-o"></i> Create category</a></li>
-                    <li @if ((string)ViewData["Title"] == "Create brand") { @: class="active"
-                        } ><a asp-area="Admin" asp-controller="Manage" asp-action="CreateBrand"><i class="fa fa-plus-square-o"></i> Create brand</a></li>
-                    <li @if ((string)ViewData["Title"] == "Create product") { @: class="active"
-                        } ><a asp-area="Admin" asp-controller="Manage" asp-action="CreateProduct"><i class="fa fa-plus-square-o"></i> Create product</a></li>
-                    <li @if ((string)ViewData["Title"] == "Issues") { @: class="active"
-                        }><a asp-area="Admin" asp-controller="Manage" asp-action="Issues"><i class="fa fa-exclamation-circle"></i> Issues</a></li>
-                    <li @if ((string)ViewData["Title"] == "Send newspaper") { @: class="active"
-                        } ><a asp-area="Admin" asp-controller="Manage" asp-action="SendNewspaper"><i class="fa fa-newspaper-o"></i> Send newspaper</a></li>
-                </ul>
-            </div>
+    <section>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">إجمالي المبيعات</div><div class="stat-value">$1.24M</div></div>
+            <div class="stat-card"><div class="stat-label">الطلبات اليوم</div><div class="stat-value">2,846</div></div>
+            <div class="stat-card"><div class="stat-label">مستخدمون نشطون</div><div class="stat-value">18,220</div></div>
+            <div class="stat-card"><div class="stat-label">معدل التحويل</div><div class="stat-value">5.9%</div></div>
         </div>
-    </div>
+        <div class="chart-box">تقارير ورسوم بيانية تفاعلية للمبيعات، الطلبات، والأداء حسب البائعين.</div>
 
-    <div class="col-md-9">
-        @RenderBody()
-    </div>
+        <div class="detail-panel" style="margin-top:16px;">
+            @RenderBody()
+        </div>
+    </section>
 </div>
 
 @section Scripts {

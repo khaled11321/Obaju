@@ -1,137 +1,72 @@
-﻿@model List<ProductListViewModel>
-
+@model List<ProductListViewModel>
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Category";
 }
 
-<div class="container">
-    <div class="col-md-12">
-        <ul class="breadcrumb">
-            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-            <li>@ViewBag.Gender</li>
-            @if (ViewBag.Category != null)
-            {
-                <li>@ViewBag.Category</li>
-            }
-        </ul>
-    </div>
-    <div class="col-md-3">
-        @await Component.InvokeAsync("CategoriesPanel")
-
-        @await Component.InvokeAsync("BrandsPanel", new { gender = ViewBag.Gender, category = ViewBag.Category })
-
-        @await Component.InvokeAsync("ColorsPanel", new { gender = ViewBag.Gender, category = ViewBag.Category })
-
-        <div class="banner">
-            <a href="#">
-                <img src="~/images/banner.jpg" alt="sales 2014" class="img-responsive">
-            </a>
+<div class="container category-layout">
+    <aside class="filter-box">
+        <h4>فلترة متقدمة</h4>
+        <div class="filter-group">
+            <label>نطاق السعر</label>
+            <input type="range" min="50" max="2000" value="900" class="form-control" />
         </div>
-    </div>
-
-    <div class="col-md-9">
-        <div class="box">
-            <h1>@ViewBag.Gender</h1>
-            <p>In our @ViewBag.Gender department we offer wide selection of the best products we have found and carefully selected worldwide.</p>
+        <div class="filter-group">
+            <label>التقييم</label>
+            <label><input type="checkbox" /> 4 نجوم فأعلى</label>
+            <label><input type="checkbox" /> 3 نجوم فأعلى</label>
         </div>
+        <div class="filter-group">
+            <label>العلامة التجارية</label>
+            <label><input type="checkbox" /> Nike</label>
+            <label><input type="checkbox" /> Adidas</label>
+            <label><input type="checkbox" /> Apple</label>
+        </div>
+        <div class="filter-group">
+            <label>خيارات الشحن</label>
+            <label><input type="checkbox" /> شحن اليوم التالي</label>
+            <label><input type="checkbox" /> شحن مجاني</label>
+        </div>
+        <div class="filter-group">
+            <label>اللون / المقاس</label>
+            <label><input type="checkbox" /> أسود</label>
+            <label><input type="checkbox" /> أبيض</label>
+            <label><input type="checkbox" /> M / L</label>
+        </div>
+        <div class="filter-group">
+            <label><input id="onlyDeals" type="checkbox" /> العروض فقط</label>
+        </div>
+    </aside>
 
-        <div class="box info-bar">
-            <div class="row">
-                <div class="col-sm-12 col-md-4 products-showing">
-                    Showing <strong>12</strong> of <strong>25</strong> products
-                </div>
-                <div class="col-sm-12 col-md-8 products-number-sort">
-                    <div class="row">
-                        <form class="form-inline">
-                            <div class="col-md-6 col-sm-6">
-                                <div class="products-number">
-                                    <strong>Show</strong>
-                                    <a href="#" class="btn btn-default btn-sm btn-primary">12</a>
-                                    <a href="#" class="btn btn-default btn-sm">24</a>
-                                    <a href="#" class="btn btn-default btn-sm">All</a> products
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="products-sort-by">
-                                    <strong>Sort by</strong>
-                                    <select name="sort-by" class="form-control">
-                                        <option>Price asc.</option>
-                                        <option>Price desc.</option>
-                                        <option>Newst</option>
-                                        <option>Oldest</option>
-                                        <option>Discout</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <section>
+        <div class="sort-row">
+            <h1 style="margin:0;">@ViewBag.Category منتجات</h1>
+            <select id="sortProducts" class="form-control" style="max-width: 260px;">
+                <option value="latest">الأحدث</option>
+                <option value="priceAsc">السعر من الأقل للأعلى</option>
+                <option value="topRated">الأعلى تقييماً</option>
+            </select>
         </div>
 
-        <div class="row products">
+        <div class="market-grid-4 js-filter-container">
             @foreach (var product in Model)
             {
-                <div class="col-md-4 col-sm-6">
-                    <div class="product">
-                        <div class="flip-container">
-                            <div class="flipper">
-                                <div class="front">
-                                    <a asp-action="Details" asp-route-id="@product.Id">
-                                        <img src="~/@product.FrontImage" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                                <div class="back">
-                                    <a asp-action="Details" asp-route-id="@product.Id">
-                                        <img src="~/@product.BackImage" alt="" class="img-responsive">
-                                    </a>
-                                </div>
-                            </div>
+                var rating = 4.1 + ((product.Id % 8) * 0.1);
+                var oldPrice = product.Price + 45;
+                var discount = (int)Math.Round((1 - (decimal)product.Price / oldPrice) * 100);
+                <article class="product-card js-filter-card" data-price="@product.Price" data-rating="@rating" data-deal="@product.OnSale.ToString().ToLowerInvariant()">
+                    @if (product.OnSale) { <span class="chip">عرض خاص</span> }
+                    <a class="product-media" asp-action="Details" asp-route-id="@product.Id"><img src="~/@product.FrontImage" alt="@product.Name" loading="lazy" /></a>
+                    <div class="product-content">
+                        <h3 class="product-title"><a asp-action="Details" asp-route-id="@product.Id">@product.Name</a></h3>
+                        <div class="rating"><i class="fa fa-star"></i> @rating.ToString("0.0") <span style="color:#64748b">(120)</span></div>
+                        <div class="price-line"><span class="price">$@product.Price</span><span class="price-old">$@oldPrice</span><span class="discount">%@discount-</span></div>
+                        <div class="card-actions">
+                            <button class="btn-add" data-add-cart type="button">أضف للسلة</button>
+                            <button class="btn-like" type="button"><i class="fa fa-heart-o"></i></button>
                         </div>
-                        <a asp-action="Details" asp-route-id="@product.Id" class="invisible">
-                            <img src="~/@product.FrontImage" alt="" class="img-responsive">
-                        </a>
-                        <div class="text">
-                            <h3><a asp-action="Details" asp-route-id="@product.Id">@product.Name</a></h3>
-                            <p class="price">$@product.Price</p>
-                            <p class="buttons">
-                                <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-default">View detail</a>
-                                <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                            </p>
-                        </div>
-
-                        @if (product.OnSale)
-                        {
-                            <div class="ribbon sale">
-                                <div class="theribbon">SALE</div>
-                                <div class="ribbon-background"></div>
-                            </div>
-                        }
-
-                        @if (product.IsNew)
-                        {
-                            <div class="ribbon new">
-                                <div class="theribbon">NEW</div>
-                                <div class="ribbon-background"></div>
-                            </div>
-                        }
-
-                        @if (product.IsGift)
-                        {
-                            <div class="ribbon gift">
-                                <div class="theribbon">GIFT</div>
-                                <div class="ribbon-background"></div>
-                            </div>
-                        }
                     </div>
-                </div>
+                </article>
             }
         </div>
-
-        <div class="pages">
-            <p class="loadMore">
-                <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-chevron-down"></i> Load more</a>
-            </p>
-        </div>
-    </div>
+    </section>
 </div>
