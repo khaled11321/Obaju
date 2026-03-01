@@ -1,111 +1,111 @@
-﻿@inject SignInManager<User> SignInManager
+@inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<div id="top">
+<header class="market-topbar">
     <div class="container">
-        <div class="col-md-6 offer" data-animate="fadeInDown">
-            <a href="#" class="btn btn-success btn-sm" data-animate-hover="shake">Offer of the day</a>
-            <a href="#">Get flat 35% off on orders over $50!</a>
-        </div>
-        <div class="col-md-6" data-animate="fadeInDown">
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <form asp-area="Identity" asp-controller="Auth" asp-action="Logout" method="post">
-                    <ul class="menu">
-                        @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), RoleName.Admin))
-                        {
-                            <li><a asp-area="Admin" asp-controller="Manage" asp-action="CreateCategory">Admin panel</a></li>
-                        }
-                        <li><a asp-area="Identity" asp-controller="Account" asp-action="MyOrders">My account</a></li>
-                        <li><button type="submit">Log out</button></li>
-                    </ul>
-                </form>
-            }
-            else
-            {
-                <ul class="menu">
-                    <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
-                    <li><a asp-area="Identity" asp-controller="Auth" asp-action="Register">Register</a></li>
-                </ul>
-            }
-        </div>
-    </div>
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="Login">Customer login</h4>
-                </div>
-                <div class="modal-body">
-                    <form asp-area="Identity" asp-controller="Auth" asp-action="Login" method="post">
-                        <div class="form-group">
-                            <input class="form-control" type="email" id="login-email" name="Email" placeholder="email" />
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" type="password" id="login-password" name="Password" placeholder="password">
-                        </div>
-                        <p class="text-center">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
-                        </p>
-                    </form>
-                    <p class="text-center text-muted">Not registered yet?</p>
-                    <p class="text-center text-muted">
-                        <a asp-area="Identity" asp-controller="Auth" asp-action="Register"><strong>Register now</strong></a>! It is easy and done in 1&nbsp;minute and gives you access to special discounts and much more!
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        <div class="market-header-grid">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="market-logo" aria-label="Obaju marketplace home">Oba<span>Market</span></a>
 
-<div class="navbar navbar-default yamm" role="navigation" id="navbar">
-    <div class="container">
-        <div class="navbar-header">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand home" data-animate-hover="bounce">
-                <img src="~/images/logo.png" alt="Obaju logo" class="hidden-xs">
-                <img src="~/images/logo-small.png" alt="Obaju logo" class="visible-xs"><span class="sr-only">Obaju - go to homepage</span>
-            </a>
-            <div class="navbar-buttons">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
-                    <span class="sr-only">Toggle navigation</span>
-                    <i class="fa fa-align-justify"></i>
-                </button>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#search">
-                    <span class="sr-only">Toggle search</span>
-                    <i class="fa fa-search"></i>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-default navbar-toggle">
-                    <i class="fa fa-shopping-cart"></i><span class="hidden-xs">3 items in cart</span>
-                </a>
-            </div>
-        </div>
-        @await Component.InvokeAsync("CategoriesNav")
-
-        <div class="navbar-buttons">
-            <div class="navbar-collapse collapse right" id="basket-overview">
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-primary navbar-btn">
-                    <i class="fa fa-shopping-cart"></i><span class="hidden-sm">3 items in cart</span>
-                </a>
-            </div>
-
-            <div class="navbar-collapse collapse right" id="search-not-mobile">
-                <button type="button" class="btn navbar-btn btn-primary" data-toggle="collapse" data-target="#search">
-                    <span class="sr-only">Toggle search</span>
-                    <i class="fa fa-search"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="collapse clearfix" id="search">
-            <form asp-area="" asp-controller="Home" asp-action="Search" class="navbar-form" role="search">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>
+            <form asp-area="" asp-controller="Home" asp-action="Search" class="search-shell" role="search">
+                <select aria-label="Select category">
+                    <option>جميع الفئات</option>
+                    <option>الإلكترونيات</option>
+                    <option>الأزياء</option>
+                    <option>المنزل والمطبخ</option>
+                    <option>الألعاب</option>
+                    <option>الصحة والجمال</option>
+                </select>
+                <input type="search" placeholder="ابحث عن ملايين المنتجات، العلامات التجارية، والعروض..." aria-label="Search products" />
+                <button type="submit" aria-label="Search"><i class="fa fa-search"></i></button>
             </form>
+
+            <div class="header-actions">
+                <a href="#" class="action-btn"><i class="fa fa-language"></i> AR | EN</a>
+                <a href="#" class="action-btn"><i class="fa fa-map-marker"></i> Egypt</a>
+                <div class="dropdown user-menu">
+                    <a href="#" class="action-btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> الحساب <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), RoleName.Admin))
+                            {
+                                <li><a asp-area="Admin" asp-controller="Manage" asp-action="CreateCategory">لوحة التحكم</a></li>
+                            }
+                            <li><a asp-area="Identity" asp-controller="Account" asp-action="MyOrders">حسابي</a></li>
+                            <li><a href="#">طلباتي</a></li>
+                            <li><a href="#">المفضلة</a></li>
+                            <li>
+                                <form asp-area="Identity" asp-controller="Auth" asp-action="Logout" method="post" style="margin:0">
+                                    <button type="submit" class="btn btn-link" style="padding:3px 20px;">تسجيل خروج</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><a href="#" data-toggle="modal" data-target="#login-modal">تسجيل الدخول</a></li>
+                            <li><a asp-area="Identity" asp-controller="Auth" asp-action="Register">إنشاء حساب</a></li>
+                        }
+                    </ul>
+                </div>
+                <a href="#" class="action-btn"><i class="fa fa-bell"></i></a>
+                <a href="#" class="action-btn"><i class="fa fa-shopping-cart"></i> <span class="badge-dot">3</span></a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav class="category-nav-wrap" aria-label="Main categories">
+    <div class="container">
+        <div class="category-nav">
+            @foreach (var category in new[] { "الإلكترونيات", "الأزياء", "المنزل", "المطبخ", "الألعاب", "الصحة", "الرياضة", "الجمال", "السيارات", "العروض" })
+            {
+                <div class="category-item">
+                    <a href="#" class="category-link">@category</a>
+                    <div class="mega-menu" role="menu">
+                        <div>
+                            <div class="mega-title">@category</div>
+                            <a href="#">الأكثر مبيعاً</a>
+                            <a href="#">وصل حديثاً</a>
+                            <a href="#">الأعلى تقييماً</a>
+                        </div>
+                        <div>
+                            <div class="mega-title">تسوق حسب</div>
+                            <a href="#">العلامات التجارية</a>
+                            <a href="#">الفئات الفرعية</a>
+                            <a href="#">السعر</a>
+                        </div>
+                        <div>
+                            <div class="mega-title">روابط سريعة</div>
+                            <a href="#">عروض حصرية</a>
+                            <a href="#">شحن سريع</a>
+                            <a href="#">منتجات البائعين</a>
+                        </div>
+                        <div class="offer-tile">
+                            <strong>خصم حتى 50%</strong>
+                            <p style="margin:6px 0 10px;">اكتشف عروضاً محدودة على أفضل المنتجات.</p>
+                            <button class="btn-cta" type="button">تسوق الآن</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</nav>
+
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="Login">Customer login</h4>
+            </div>
+            <div class="modal-body">
+                <form asp-area="Identity" asp-controller="Auth" asp-action="Login" method="post">
+                    <div class="form-group"><input class="form-control" type="email" id="login-email" name="Email" placeholder="email" /></div>
+                    <div class="form-group"><input class="form-control" type="password" id="login-password" name="Password" placeholder="password"></div>
+                    <p class="text-center"><button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button></p>
+                </form>
+            </div>
         </div>
     </div>
 </div>
